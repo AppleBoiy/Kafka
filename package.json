@@ -8,7 +8,8 @@
     "start": "node src/server.js",
     "test-client": "node tests/test-client.js"
   },
-  "dependencies": {},
-  "devDependencies": {},
+  "dependencies": {
+    "net": "^1.0.0"
+  },
   "author": "AppleBoiy"
 }
