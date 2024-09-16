@@ -8,7 +8,7 @@ export function writeInt32(buffer, offset, value) {
 
 export function createResponseBuffer(correlationId) {
     const responseBuffer = Buffer.alloc(8);
-    writeInt32(responseBuffer, 0, 4);
-    writeInt32(responseBuffer, 4, correlationId);
+    writeInt32(responseBuffer, 0, 4);           // 4 bytes for the message length
+    writeInt32(responseBuffer, 4, correlationId);  // Correlation ID
     return responseBuffer;
 }
