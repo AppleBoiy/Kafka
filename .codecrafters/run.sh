@@ -8,4 +8,4 @@
 
 set -e # Exit on failure
 
-exec node app/main.js "$@"
+exec node src/server.js "$@"

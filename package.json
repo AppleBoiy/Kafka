@@ -1,6 +1,14 @@
 {
-  "name": "@codecrafters/kafka",
+  "name": "kafka-wire-protocol",
   "version": "1.0.0",
+  "description": "Kafka wire protocol server implementation",
   "type": "module",
-  "dependencies": {}
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test-client": "node tests/test-client.js"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "author": "AppleBoiy"
 }

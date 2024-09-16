@@ -13,7 +13,7 @@ about handling the network protocol, event loops, TCP sockets and more.
 
 # Passing the first stage
 
-The entry point for your Kafka implementation is in `app/main.js`. Study and
+The entry point for your Kafka implementation is in `app/server.js`. Study and
 uncomment the relevant code, and push your changes to pass the first stage:
 
 ```sh
@@ -29,6 +29,6 @@ Note: This section is for stages 2 and beyond.
 
 1. Ensure you have `node (21)` installed locally
 1. Run `./your_program.sh` to run your Kafka broker, which is implemented in
-   `app/main.js`.
+   `app/server.js`.
 1. Commit your changes and run `git push origin master` to submit your solution
    to CodeCrafters. Test output will be streamed to your terminal.
