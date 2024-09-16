@@ -1,11 +1,11 @@
-import net from "net";
+import net from 'net';
 
 function ntohl(data, offset = 0) {
-    return (data[offset] << 24) + (data[offset + 1] << 16) + (data[offset + 2] << 8) + data[offset + 3];
+    return (data[offset] << 24) | (data[offset + 1] << 16) | (data[offset + 2] << 8) | data[offset + 3];
 }
 
 function ntohs(data, offset = 0) {
-    return (data[offset] << 8) + data[offset + 1];
+    return (data[offset] << 8) | data[offset + 1];
 }
 
 function parseHeader(data) {
@@ -14,7 +14,7 @@ function parseHeader(data) {
         clientIdEnd++;
     }
 
-    const clientId = data.slice(9, clientIdEnd);
+    const clientId = data.slice(8, clientIdEnd).toString('utf8');
     return {
         requestApiKey: ntohs(data, 0),
         requestApiVersion: ntohs(data, 2),
@@ -24,23 +24,23 @@ function parseHeader(data) {
 }
 
 async function kafkaServer(socket) {
-    let data = Buffer.alloc(0);
+    let dataBuffer = Buffer.alloc(0);
 
     function processData(buffer) {
-        data = Buffer.concat([data, buffer]);
+        dataBuffer = Buffer.concat([dataBuffer, buffer]);
 
-        while (data.length >= 4) {
-            const length = ntohl(data);
-            if (data.length < length + 4) return;
+        while (dataBuffer.length >= 4) {
+            const length = ntohl(dataBuffer);
+            if (dataBuffer.length < length + 4) return;
 
-            const packet = data.slice(4, length + 4);
-            data = data.slice(length + 4);
+            const packet = dataBuffer.slice(4, length + 4);
+            dataBuffer = dataBuffer.slice(length + 4);
 
             const header = parseHeader(packet);
 
             if (![0, 1, 2, 3, 4].includes(header.requestApiVersion)) {
                 const errorResponse = Buffer.concat([
-                    Buffer.from([0, 0, 0, 6]), // Length
+                    Buffer.from([0, 0, 0, 6]), // Length (6 bytes)
                     header.correlationId,
                     Buffer.from([0, 35]), // Error code (35 = UNSUPPORTED_VERSION)
                 ]);
@@ -67,13 +67,13 @@ async function kafkaServer(socket) {
         }
     }
 
-    socket.on("data", processData);
+    socket.on('data', processData);
 }
 
 function startServer() {
     const server = net.createServer(kafkaServer);
-    server.listen(9092, "127.0.0.1", () => {
-        console.log("Server listening on port 9092");
+    server.listen(9092, '127.0.0.1', () => {
+        console.log('Server listening on port 9092');
     });
 }
 
